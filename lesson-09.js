@@ -1,5 +1,6 @@
-'use strict';
-
+"use strict";
+console.log("JavaScript is on the page");
+console.log(document.title);
 // Lesson 09 exercise: The DOM and forms
 // In your exercise repository, create a branch named `lesson-09-exercise` and switch to it.
 // This lesson works with two provided files: open `lesson-09.html` with Live Server and keep
@@ -11,12 +12,10 @@
 // the DevTools Console rather than in a terminal. In a comment, state what the `defer`
 // attribute prevented.
 
-
 // TODO: Part two.
 // Select the page's `h1` with `querySelector` and replace its `textContent` with a label name
 // of your choosing. Select the tagline by its class and change its text, then add the provided
 // highlight class to it through `classList`.
-
 
 // TODO: Part three.
 // The file provides the artists as an array of objects. Loop over it, create an `article`
@@ -32,19 +31,45 @@ const artists = [
   { name: "Miyagi and Andy Panda", genre: "Hip-hop", total: "16:21" },
   { name: "Johnny Cash", genre: "Country", total: "15:40" },
 ];
+const cardArea = document.querySelector(".cards");
 
+function renderCard(artist) {
+  const card = document.createElement("article");
+  const title = document.createElement("h3");
+  title.textContent = artist.name;
+  const line = document.createElement("p");
+  line.textContent = `${artist.genre}, ${artist.total} of music`;
+  card.append(title, line);
+  cardArea.append(card);
+}
+for (const artist of artists) {
+  renderCard(artist);
+}
 
 // TODO: Part four.
 // Add a sixth artist object of your own invention to the array and reload. Confirm that the
 // sixth card exists, and state in a comment what you did not have to change, compared with the
 // five hand-copied cards this course opened on.
-
+//artists.push({ name: "Taylor Swift", genre: "pop", total: "12:34" }); //only pushing the card into the array does not load the page with the new card.
+const newArtist = { name: "Taylor Swift", genre: "pop", total: "12:34" };
+function addNewCard(artist) {
+  renderCard(artist);
+}
+newArtist && addNewCard(newArtist);
+console.log(artists);
+console.log(artists);
 
 // TODO: Part five.
 // The page provides a button with the shuffle class and an element with the featured class. On
 // click, pick a random artist using the random recipe with `Math.floor`, and write a featured
 // sentence into the featured element with a template literal.
-
+const button = document.querySelector(".shuffle");
+const featured = document.querySelector(".featured");
+button.addEventListener("click", () => {
+  const pick = artists[Math.floor(Math.random() * artists.length)];
+  document.querySelector(".featured").textContent =
+    `Featured today: ${pick.name}`;
+});
 
 // TODO: Part six.
 // The page provides a form with the signup class and a text input with the artist-name id. On
@@ -54,8 +79,19 @@ const artists = [
 // call. An empty submission does nothing; name in a comment which falsy value makes that check
 // work. As a stretch, clear the input by assigning it an empty string after each successful
 // addition.
+const form = document.querySelector(".signup");
+const nameInput = document.querySelector("#artist-name");
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const artistName = nameInput.value.trim();
+  if (artistName) {
+    const newArtist = { name: artistName, genre: "Unknown", total: "0:00" };
+    addNewCard(newArtist);
+    nameInput.value = "";
+  }
+});
 
-
+// Falsy value that makes the check work: an empty string ("") or a string with only whitespace after trimming.
 // TODO: Save deliberately, commit with a clear message, push the branch, and open a pull request
 // into main. This is the final exercise of the course, and the reviewed merge closes it.
 // TODO: Submit the link to the pull request for review.
